@@ -1,0 +1,6 @@
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/main.c:68:5:main	1
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/main.c:120:6:SystemClock_Config	3
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/main.c:167:13:MX_USART3_UART_Init	2
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/main.c:200:13:MX_USB_OTG_FS_PCD_Init	2
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/main.c:235:13:MX_GPIO_Init	1
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/main.c:289:6:Error_Handler	1

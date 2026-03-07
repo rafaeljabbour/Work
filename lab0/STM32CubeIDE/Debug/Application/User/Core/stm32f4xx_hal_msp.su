@@ -1,0 +1,5 @@
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/stm32f4xx_hal_msp.c:64:6:HAL_MspInit	16	static
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/stm32f4xx_hal_msp.c:86:6:HAL_UART_MspInit	48	static
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/stm32f4xx_hal_msp.c:122:6:HAL_UART_MspDeInit	16	static
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/stm32f4xx_hal_msp.c:151:6:HAL_PCD_MspInit	136	static
+C:/Users/iamra/OneDrive/Desktop/OneDrive - University of Toronto/1. University/2025 - 2026_Third Year/Sem 2/ECE 342/labs/lab0/lab0/Core/Src/stm32f4xx_hal_msp.c:205:6:HAL_PCD_MspDeInit	16	static

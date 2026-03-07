@@ -1,0 +1,12 @@
+../Core/Src/main.c:68:6:print_msg	1
+../Core/Src/main.c:72:6:LD3_start	1
+../Core/Src/main.c:76:6:LD3_setPeriod	1
+../Core/Src/main.c:80:6:LD3_setDuty	1
+../Core/Src/main.c:91:5:main	2
+../Core/Src/main.c:168:6:SystemClock_Config	3
+../Core/Src/main.c:215:13:MX_ADC3_Init	3
+../Core/Src/main.c:267:13:MX_TIM12_Init	5
+../Core/Src/main.c:319:13:MX_USART3_UART_Init	2
+../Core/Src/main.c:352:13:MX_USB_OTG_FS_PCD_Init	2
+../Core/Src/main.c:387:13:MX_GPIO_Init	1
+../Core/Src/main.c:448:6:Error_Handler	1
