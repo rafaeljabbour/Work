@@ -1,5 +1,0 @@
-../Core/Src/ov7670.c:157:9:ov7670_init	3
-../Core/Src/ov7670.c:180:9:ov7670_read	3
-../Core/Src/ov7670.c:188:19:ov7670_write	2
-../Core/Src/ov7670.c:195:6:ov7670_snapshot	1
-../Core/Src/ov7670.c:200:6:ov7670_capture	1
