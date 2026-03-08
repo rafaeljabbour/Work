@@ -99,11 +99,12 @@ const uint8_t OV7670_reg[OV7670_REG_NUM][2] = {
   { 0x6a, 0x40 }, //
   { 0x01, 0x40 }, //
   { 0x02, 0x60 }, //
-  { 0x13, 0xe7 },
+  { 0x13, 0xe7 }, // the options i tried were e1,e3,e7, after doing testing e7 seems to be the best for red detection
 
   // Additional parameters
   { 0x34, 0x11 }, //
   { 0x3f, 0x00 }, //
+  { 0xb0, 0x84 }, // without this everything looks green, I need this no matter what https://thinksmallthings.wordpress.com/2012/11/03/ov7670-yuv-demystified/comment-page-1/
   { 0x75, 0x05 }, //
   { 0x76, 0xe1 }, //
   { 0x4c, 0x00 }, //

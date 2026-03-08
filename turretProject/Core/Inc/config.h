@@ -16,10 +16,9 @@ extern UART_HandleTypeDef huart3;
 
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
-
-void print_msg(char * msg);
-
-void uart_send_bin(uint8_t * buff, unsigned int len);
+void print_msg(char* msg);
+void uart_send_bin(uint8_t* buff, unsigned int len);
+uint8_t IsButtonPressed(void);
 
 void SystemClock_Config(void);
 void MX_GPIO_Init(void);
@@ -30,5 +29,6 @@ void MX_USB_OTG_FS_PCD_Init(void);
 void MX_I2C2_Init(void);
 void MX_TIM1_Init(void);
 void MX_TIM6_Init(void);
+void MX_TIM2_Init(void);
 
 #endif

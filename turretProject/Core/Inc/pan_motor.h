@@ -1,7 +1,5 @@
-/**
- * @file    pan_motor.h
- * @brief   MDrive 23 Plus pan motor control via Step/Direction interface
- *
+/*
+ * MDrive 23 Plus pan motor control via Step/Direction interface
  * Pins:
  *   PB10 (TIM2_CH3, Open-Drain): used to connect to MDrive 'Step Clock'
  *   PB11 (GPIO Open-Drain): used to connect to MDrive 'Direction'
@@ -19,14 +17,13 @@
 #define PAN_DIR_PORT GPIOB
 #define PAN_DIR_PIN GPIO_PIN_11
 
-typedef enum {
-    PAN_DIR_CW  = 0,
-    PAN_DIR_CCW = 1
-} PanDirection_t;
+#define TIM2_COUNTER_CLOCK_HZ 1000000U  // 84 MHz / (83 [prescaler] + 1) = 1 MHz
 
-void pan_motor_set_direction(PanDirection_t dir);
-void pan_motor_start(uint32_t freq_hz);
-void pan_motor_stop(void);
-void pan_motor_set_speed(uint32_t freq_hz);
+typedef enum { PAN_DIR_CW = 0, PAN_DIR_CCW = 1 } PanDirection_t;
+
+void panMotorSetDirection(PanDirection_t dir);
+void panMotorStart(uint32_t frequency);
+void panMotorStop(void);
+void panMotorSetFrequency(uint32_t frequency);
 
 #endif
