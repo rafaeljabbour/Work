@@ -81,7 +81,7 @@ void runTurretFsm(void) {
     HAL_DCMI_Suspend(&hdcmi);
 
     // Run red target detection
-    target_detect(snapshot_buff, &result);
+    TargetDetect(snapshot_buff, &result);
 
     // Feed the result into the FSM — this drives the motors
     TurretFsmUpdate(&result);

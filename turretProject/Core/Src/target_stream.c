@@ -5,9 +5,12 @@
 
 #include "config.h"
 
+extern uint16_t snapshot_buff[];
+extern volatile uint8_t dma_flag;
+
 // sends a colored image, with the bounding box and centroid drawn on it
 void TargetStreamFrame(const uint16_t *frameBuf, const TargetResult_t *result) {
-  const uint8_t *buff = (const uint8_t *)frame_buf;
+  const uint8_t *buff = (const uint8_t *)frameBuf;
 
   // 1. Send preamble
   print_msg("PREAMBLE!\r\n");
@@ -44,7 +47,7 @@ void run_camera_stream(void) {
     HAL_DCMI_Suspend(&hdcmi);
 
     /* Run detection */
-    target_detect(snapshot_buff, &result);
+    TargetDetect(snapshot_buff, &result);
 
     /* Send image + detection result to PC */
     TargetStreamFrame(snapshot_buff, &result);

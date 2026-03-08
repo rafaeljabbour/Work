@@ -78,7 +78,7 @@ void SystemClock_Config(void) {
  * @param None
  * @retval None
  */
-static void MX_DCMI_Init(void) {
+void MX_DCMI_Init(void) {
   /* USER CODE BEGIN DCMI_Init 0 */
 
   /* USER CODE END DCMI_Init 0 */
@@ -111,7 +111,7 @@ static void MX_DCMI_Init(void) {
  * @param None
  * @retval None
  */
-static void MX_I2C2_Init(void) {
+void MX_I2C2_Init(void) {
   /* USER CODE BEGIN I2C2_Init 0 */
 
   /* USER CODE END I2C2_Init 0 */
@@ -141,7 +141,7 @@ static void MX_I2C2_Init(void) {
  * @param None
  * @retval None
  */
-static void MX_TIM1_Init(void) {
+void MX_TIM1_Init(void) {
   /* USER CODE BEGIN TIM1_Init 0 */
 
   /* USER CODE END TIM1_Init 0 */
@@ -199,7 +199,7 @@ static void MX_TIM1_Init(void) {
  * @param None
  * @retval None
  */
-static void MX_TIM2_Init(void) {
+void MX_TIM2_Init(void) {
   /* USER CODE BEGIN TIM2_Init 0 */
 
   /* USER CODE END TIM2_Init 0 */
@@ -250,7 +250,7 @@ static void MX_TIM2_Init(void) {
  * @param None
  * @retval None
  */
-static void MX_TIM6_Init(void) {
+void MX_TIM6_Init(void) {
   /* USER CODE BEGIN TIM6_Init 0 */
 
   /* USER CODE END TIM6_Init 0 */
@@ -283,7 +283,7 @@ static void MX_TIM6_Init(void) {
  * @param None
  * @retval None
  */
-static void MX_USART3_UART_Init(void) {
+void MX_USART3_UART_Init(void) {
   /* USER CODE BEGIN USART3_Init 0 */
 
   /* USER CODE END USART3_Init 0 */
@@ -312,7 +312,7 @@ static void MX_USART3_UART_Init(void) {
  * @param None
  * @retval None
  */
-static void MX_USB_OTG_FS_PCD_Init(void) {
+void MX_USB_OTG_FS_PCD_Init(void) {
   /* USER CODE BEGIN USB_OTG_FS_Init 0 */
 
   /* USER CODE END USB_OTG_FS_Init 0 */
@@ -341,7 +341,7 @@ static void MX_USB_OTG_FS_PCD_Init(void) {
 /**
  * Enable DMA controller clock
  */
-static void MX_DMA_Init(void) {
+void MX_DMA_Init(void) {
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
 
@@ -356,7 +356,7 @@ static void MX_DMA_Init(void) {
  * @param None
  * @retval None
  */
-static void MX_GPIO_Init(void) {
+void MX_GPIO_Init(void) {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */

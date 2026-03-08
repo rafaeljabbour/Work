@@ -44,6 +44,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 extern DCMI_HandleTypeDef hdcmi;
+extern volatile uint8_t dma_flag;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

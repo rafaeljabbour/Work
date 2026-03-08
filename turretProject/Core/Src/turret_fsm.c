@@ -40,7 +40,7 @@ void TurretFsmInit(void) {
   fsm.searchDir = 0;
 
   // we make sure motors are stopped
-  pan_motor_stop();
+  panMotorStop();
 
   print_msg("(initialized) -> (IDLE)\r\n");
   print_msg("press B1 to start searching\r\n");
@@ -131,7 +131,7 @@ static void FsmHandleIdle(const TargetResult_t *result) {
   }
 
   // if B1 is pressed, we start searching
-  if (isButtonPressed()) {
+  if (IsButtonPressed()) {
     HAL_Delay(100);  // debounce
     FsmEnterState(STATE_SEARCHING);
   }
@@ -141,7 +141,7 @@ static void FsmHandleIdle(const TargetResult_t *result) {
 static void FsmHandleSearching(const TargetResult_t *result) {
   // if a target is detected, we stop the motor and go to aiming
   if (result->detected) {
-    pan_motor_stop();
+    panMotorStop();
     fsm.lostCount = 0;
     FsmEnterState(STATE_AIMING);
     return;
@@ -151,7 +151,7 @@ static void FsmHandleSearching(const TargetResult_t *result) {
 
   if (fsm.searchStepCount >= SEARCH_STEPS_BEFORE_REVERSE) {
     // reverse direction
-    pan_motor_stop();
+    panMotorStop();
     HAL_Delay(100);
 
     // toggle direction
@@ -162,17 +162,17 @@ static void FsmHandleSearching(const TargetResult_t *result) {
   if (fsm.searchStepCount <= 1) {
     // start the motor at start or when we reverse
     if (fsm.searchDir) {
-      pan_motor_set_direction(PAN_DIR_CCW);
+      panMotorSetDirection(PAN_DIR_CCW);
     } else {
-      pan_motor_set_direction(PAN_DIR_CW);
+      panMotorSetDirection(PAN_DIR_CW);
     }
-    pan_motor_start(SEARCH_SPEED_HZ);
+    panMotorStart(SEARCH_SPEED_HZ);
   }
 
   // if we press B1 during search, go back to IDLE
-  if (isButtonPressed()) {
+  if (IsButtonPressed()) {
     HAL_Delay(100);  // debounce
-    pan_motor_stop();
+    panMotorStop();
     FsmEnterState(STATE_IDLE);
   }
 }
@@ -184,7 +184,7 @@ static void FsmHandleAiming(const TargetResult_t *result) {
     fsm.lostCount++;
     // if we have been without a target for too long, we go back to searching
     if (fsm.lostCount >= TARGET_LOST_FRAMES) {
-      pan_motor_stop();
+      panMotorStop();
       // we reset the lost and lock on counters
       fsm.lostCount = 0;
       fsm.lockOnCount = 0;
@@ -202,26 +202,26 @@ static void FsmHandleAiming(const TargetResult_t *result) {
   int16_t errorCol = fsm.errorCol;
   // if the target is to the right of the center, we pan clockwise
   if (errorCol > AIM_COL_TOLERANCE) {
-    pan_motor_set_direction(PAN_DIR_CW);
+    panMotorSetDirection(PAN_DIR_CW);
     // faster when target is further away and slower when closer to the center
     uint32_t speed = (uint32_t)(errorCol * AIM_PAN_GAIN);
     if (speed < 500) speed = 500;      // minimum speed
     if (speed > 15000) speed = 15000;  // maximum speed
-    pan_motor_start(speed);
+    panMotorStart(speed);
 
   }
   // if the target is to the left of the center, we pan counter-clockwise
   else if (errorCol < -AIM_COL_TOLERANCE) {
-    pan_motor_set_direction(PAN_DIR_CCW);
+    panMotorSetDirection(PAN_DIR_CCW);
     // faster when target is further away and slower when closer to the center
     uint32_t speed = (uint32_t)(-errorCol * AIM_PAN_GAIN);
     if (speed < 500) speed = 500;      // minimum speed
     if (speed > 15000) speed = 15000;  // maximum speed
-    pan_motor_start(speed);
+    panMotorStart(speed);
   }
   // if the target is within the horizontal tolerance, we stop the motor
   else {
-    pan_motor_stop();
+    panMotorStop();
   }
 
   // TODO: Add tilt motor control when TMC2209 driver arrives.
@@ -240,7 +240,7 @@ static void FsmHandleAiming(const TargetResult_t *result) {
     fsm.lockOnCount++;
     // if we have been on target for too long, we go to locked on
     if (fsm.lockOnCount >= LOCK_ON_FRAME_COUNT) {
-      pan_motor_stop();
+      panMotorStop();
       FsmEnterState(STATE_LOCKED_ON);
     }
   } else {
@@ -287,12 +287,12 @@ static void FsmHandleLockedOn(const TargetResult_t *result) {
   if (fsm.frameCount % 15 == 0) {
     char msg[80];
     sprintf(msg, "LOCKED: errC=%d errR=%d — press B1 to fire\r\n", errorCol,
-            errorRow);
+            fsm.errorRow);
     print_msg(msg);
   }
 
   // if we press B1, we go to firing
-  if (isButtonPressed()) {
+  if (IsButtonPressed()) {
     HAL_Delay(100);  // debounce
     FsmEnterState(STATE_FIRING);
   }

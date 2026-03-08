@@ -46,10 +46,11 @@ typedef struct {
   uint32_t frameCount;  // how many frames we have processed since we started
 } TurretFSM_t;
 
+void TurretFsmInit(void);
 void TurretFsmUpdate(const TargetResult_t* result);
 TurretState_t TurretFsmGetState(void);
 
-const char* TurretFsmStateName(TurretState_t state) {
+static inline const char* TurretFsmStateName(TurretState_t state) {
   switch (state) {
     case STATE_IDLE:
       return "IDLE";
