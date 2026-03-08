@@ -1,6 +1,10 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+// 1 to stream camera frames and detection with fsm.
+// 0 for fsm only.
+#define ENABLE_STREAM 0
+
 #include "main.h"
 
 extern DCMI_HandleTypeDef hdcmi;

@@ -22,6 +22,7 @@
 
 #include "config.h"
 #include "turret_fsm.h"
+#include "target_stream.h"
 uint16_t snapshot_buff[IMG_ROWS * IMG_COLS];
 
 volatile uint8_t dma_flag = 0;
@@ -85,6 +86,11 @@ void runTurretFsm(void) {
 
     // Feed the result into the FSM — this drives the motors
     TurretFsmUpdate(&result);
+
+#if ENABLE_STREAM
+    // display live feed
+    TargetStreamFrame(snapshot_buff, &result);
+#endif
 
     // Resume camera capture
     HAL_DCMI_Resume(&hdcmi);
