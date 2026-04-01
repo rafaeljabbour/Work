@@ -18,6 +18,7 @@
 #include "config.h"
 #include "ov7670.h"
 #include "pan_motor.h"
+#include "tilt_motor.h"
 
 // the FSM context
 static TurretFSM_t fsm;
@@ -41,6 +42,7 @@ void TurretFsmInit(void) {
 
   // we make sure motors are stopped
   panMotorStop();
+  tiltMotorStop();
 
   print_msg("(initialized) -> (IDLE)\r\n");
   print_msg("press B1 to start searching\r\n");
@@ -81,6 +83,7 @@ static void FsmEnterState(TurretState_t newState) {
     case STATE_LOCKED_ON:
       HAL_GPIO_WritePin(GPIOB, LD1_Pin, GPIO_PIN_SET);  // green
       HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);  // red
+      fsm.lockOnStartTick = HAL_GetTick();
       break;
     case STATE_FIRING:
       HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);  // red
@@ -142,6 +145,7 @@ static void FsmHandleSearching(const TargetResult_t *result) {
   // if a target is detected, we stop the motor and go to aiming
   if (result->detected) {
     panMotorStop();
+    tiltMotorStop();
     fsm.lostCount = 0;
     FsmEnterState(STATE_AIMING);
     return;
@@ -185,6 +189,7 @@ static void FsmHandleAiming(const TargetResult_t *result) {
     // if we have been without a target for too long, we go back to searching
     if (fsm.lostCount >= TARGET_LOST_FRAMES) {
       panMotorStop();
+      tiltMotorStop();
       // we reset the lost and lock on counters
       fsm.lostCount = 0;
       fsm.lockOnCount = 0;
@@ -200,40 +205,35 @@ static void FsmHandleAiming(const TargetResult_t *result) {
   // this is the main logic for aiming the turret
 
   int16_t errorCol = fsm.errorCol;
-  // if the target is to the right of the center, we pan clockwise
+  // pan motor control has a fixed slow speed
   if (errorCol > AIM_COL_TOLERANCE) {
     panMotorSetDirection(PAN_DIR_CW);
-    // faster when target is further away and slower when closer to the center
-    uint32_t speed = (uint32_t)(errorCol * AIM_PAN_GAIN);
-    if (speed < 500) speed = 500;      // minimum speed
-    if (speed > 15000) speed = 15000;  // maximum speed
-    panMotorStart(speed);
-
-  }
-  // if the target is to the left of the center, we pan counter-clockwise
-  else if (errorCol < -AIM_COL_TOLERANCE) {
+    panMotorStart(200);
+  } else if (errorCol < -AIM_COL_TOLERANCE) {
     panMotorSetDirection(PAN_DIR_CCW);
-    // faster when target is further away and slower when closer to the center
-    uint32_t speed = (uint32_t)(-errorCol * AIM_PAN_GAIN);
-    if (speed < 500) speed = 500;      // minimum speed
-    if (speed > 15000) speed = 15000;  // maximum speed
-    panMotorStart(speed);
-  }
-  // if the target is within the horizontal tolerance, we stop the motor
-  else {
+    panMotorStart(200);
+  } else {
     panMotorStop();
   }
 
-  // TODO: Add tilt motor control when TMC2209 driver arrives.
-
   int16_t errorRow = fsm.errorRow;
+
+  // tilt motor control has a fixed speed
+  if (errorRow > AIM_ROW_TOLERANCE) {
+    tiltMotorSetDirection(TILT_DIR_DOWN);
+    tiltMotorStart(100);
+  } else if (errorRow < -AIM_ROW_TOLERANCE) {
+    tiltMotorSetDirection(TILT_DIR_UP);
+    tiltMotorStart(100);
+  } else {
+    tiltMotorStop();
+  }
 
   // check if on target
   uint8_t colOk =
       (errorCol >= -AIM_COL_TOLERANCE && errorCol <= AIM_COL_TOLERANCE);
-  // TODO: uint8_t rowOk = (errorRow >= -AIM_ROW_TOLERANCE && errorRow <=
-  // AIM_ROW_TOLERANCE);
-  uint8_t rowOk = 1;
+  uint8_t rowOk =
+      (errorRow >= -AIM_ROW_TOLERANCE && errorRow <= AIM_ROW_TOLERANCE);
 
   if (colOk && rowOk) {
     // we track how many frames we have been on target
@@ -241,6 +241,7 @@ static void FsmHandleAiming(const TargetResult_t *result) {
     // if we have been on target for too long, we go to locked on
     if (fsm.lockOnCount >= LOCK_ON_FRAME_COUNT) {
       panMotorStop();
+      tiltMotorStop();
       FsmEnterState(STATE_LOCKED_ON);
     }
   } else {
@@ -270,10 +271,13 @@ static void FsmHandleLockedOn(const TargetResult_t *result) {
 
   // we check if target drifted out of tolerance
   int16_t errorCol = fsm.errorCol;
+  int16_t errorRow = fsm.errorRow;
   uint8_t colOk =
       (errorCol >= -AIM_COL_TOLERANCE && errorCol <= AIM_COL_TOLERANCE);
+  uint8_t rowOk =
+      (errorRow >= -AIM_ROW_TOLERANCE && errorRow <= AIM_ROW_TOLERANCE);
 
-  if (!colOk) {
+  if (!colOk || !rowOk) {
     // target moved, go back to aiming
     fsm.lockOnCount = 0;
     FsmEnterState(STATE_AIMING);
@@ -291,9 +295,8 @@ static void FsmHandleLockedOn(const TargetResult_t *result) {
     print_msg(msg);
   }
 
-  // if we press B1, we go to firing
-  if (IsButtonPressed()) {
-    HAL_Delay(100);  // debounce
+  // auto-fire after 5 seconds locked on
+  if ((HAL_GetTick() - fsm.lockOnStartTick) >= LOCKED_ON_AUTO_FIRE_MS) {
     FsmEnterState(STATE_FIRING);
   }
 }

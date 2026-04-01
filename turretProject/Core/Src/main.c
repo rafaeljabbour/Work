@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "config.h"
+#include "tilt_motor.h"
 #include "turret_fsm.h"
 #include "target_stream.h"
 uint16_t snapshot_buff[IMG_ROWS * IMG_COLS];
@@ -43,6 +44,7 @@ int main(void) {
   MX_TIM1_Init();
   MX_TIM6_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
 
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   if (ov7670_init() != 0) {
@@ -53,8 +55,6 @@ int main(void) {
   }
 
   runTurretFsm();
-
-  // run_camera_stream();
 
   while (1) {
   }

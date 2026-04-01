@@ -21,11 +21,12 @@ typedef enum {
  * We reverse after ~25,600 steps (180 deg).
  */
 #define SEARCH_STEPS_BEFORE_REVERSE 25600
-#define AIM_COL_TOLERANCE 8
-#define AIM_ROW_TOLERANCE 8
-#define LOCK_ON_FRAME_COUNT 5
-#define SEARCH_SPEED_HZ 3000
-#define AIM_PAN_GAIN 10
+#define AIM_COL_TOLERANCE 20
+#define AIM_ROW_TOLERANCE 20
+#define LOCK_ON_FRAME_COUNT 3
+#define SEARCH_SPEED_HZ 300
+#define AIM_PAN_GAIN 3
+#define AIM_TILT_GAIN 3
 #define TARGET_LOST_FRAMES 10
 
 typedef struct {
@@ -44,7 +45,10 @@ typedef struct {
 
   uint32_t searchStepCount;  // how much we spun in one direction
   uint32_t frameCount;  // how many frames we have processed since we started
+  uint32_t lockOnStartTick;  // HAL tick when we entered LOCKED_ON
 } TurretFSM_t;
+
+#define LOCKED_ON_AUTO_FIRE_MS 5000
 
 void TurretFsmInit(void);
 void TurretFsmUpdate(const TargetResult_t* result);
