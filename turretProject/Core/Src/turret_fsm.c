@@ -79,6 +79,7 @@ static void FsmEnterState(TurretState_t newState) {
       break;
     case STATE_AIMING:
       HAL_GPIO_WritePin(GPIOB, LD1_Pin, GPIO_PIN_SET);  // green
+      HAL_GPIO_WritePin(GPIOB, LD2_Pin, GPIO_PIN_SET);  // blue
       break;
     case STATE_LOCKED_ON:
       HAL_GPIO_WritePin(GPIOB, LD1_Pin, GPIO_PIN_SET);  // green
@@ -290,8 +291,9 @@ static void FsmHandleLockedOn(const TargetResult_t *result) {
   // print lock status occasionally
   if (fsm.frameCount % 15 == 0) {
     char msg[80];
-    sprintf(msg, "LOCKED: errC=%d errR=%d — press B1 to fire\r\n", errorCol,
-            fsm.errorRow);
+    uint32_t elapsed = HAL_GetTick() - fsm.lockOnStartTick;
+    sprintf(msg, "LOCKED: errC=%d errR=%d — firing in %lus\r\n", errorCol,
+            fsm.errorRow, (unsigned long)((LOCKED_ON_AUTO_FIRE_MS - elapsed) / 1000));
     print_msg(msg);
   }
 

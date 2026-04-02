@@ -3,7 +3,7 @@
 
 // 1 to stream camera frames and detection with fsm.
 // 0 for fsm only.
-#define ENABLE_STREAM 0
+#define ENABLE_STREAM 1
 
 #include "main.h"
 

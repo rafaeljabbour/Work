@@ -16,7 +16,7 @@
 #include "ov7670.h"
 
 // we threshold to detect red objects
-#define CR_THRESHOLD_MIN 160  // Cr must be ABOVE to be target
+#define CR_THRESHOLD_MIN 150  // Cr must be ABOVE to be target
 #define CB_THRESHOLD_MAX 115  // Cb must be BELOW to be target
 #define MIN_RED_PIXELS 20     // minimum red pixels to count as a target
 
